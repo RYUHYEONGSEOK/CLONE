@@ -1,0 +1,160 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// ♣Progress Note
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// 16.12.01 ~ 17.12.15
+- FrameWork
+
+// ~ 17.12.20 ----------
+- Terrain 
+- Terrain Shader
+- UI 
+- Texture Shader
+
+// ~ 17.01.01 ----------
+- FBX SDK
+- Mesh Loading
+- Static Mesh
+
+// ~ 17.01.06 ----------
+- Mesh - Animation
+- SkyBox
+
+// ~ 17.01.09 ----------
+- Font Render
+- Billboard
+
+// ~ 17.01.11 ----------
+- Move on Nevi Mesh
+
+// ~ 17.01.12 ----------
+- Defferd Rendering (FAILED)
+
+// ~ 17.01.13 ----------
+- Defferd Rendering (FAILED)
+
+// ~ 17.01.18 ----------
+- Mesh Bounding Box (FAILED)
+
+// ~ 17.01.19 ----------
+- Mesh Bounding Box
+- AABB Col
+
+// ~ 17.01.23 ----------
+- Player Animation State
+- Terrain Collision
+
+// ~ 17.01.24 ----------
+- Deferred Rendering (FAILED)
+
+// ~ 17.01.27 ----------
+- Deferred Rendering (Multi-RenderTarget complete)
+
+// ~ 17.01.31 ----------
+- Deferred Rendering (Multi Texture blending complete)
+
+// ~ 17.02.03 ----------
+- Loading Bar(Texture Split Rendering)
+
+// ~ 17.02.13 ----------
+- Loading Bar Complete
+
+// ~ 17.02.15 ----------
+- Logo Scene
+
+// ~ 17.02.16 ----------
+- Logo Scene(Button Complete)
+
+// ~ 17.02.19 ----------
+- Bot Normal State Pattern
+
+// ~ 17.02.21 ----------
+- Light Render(FAILED)
+
+// ~ 17.02.26 ----------
+- Stage Scene UI
+
+// ~ 17.03.01 ----------
+- Frustum Culling(Mesh)
+
+// ~ 17.03.04 ----------
+- Static Cam
+
+// ~ 17.03.07 ----------
+- Bead System
+
+// ~ 17.03.15 ----------
+- Deferred Lighting
+
+// ~ 17.03.27 ----------
+- Shadow -> Depth Map Create
+
+// ~ 17.03.30 ----------
+- Player State
+
+// ~ 17.04.10 ----------
+- Water Buffer Create
+
+// ~ 17.04.12 ----------
+- Water Wave
+- Player State modify
+- Bot Action modify
+
+// ~ 17.04.13 ----------
+- Custom Scene Client Add/ Delete
+- Move On Sliding Vector
+
+// ~ 17.04.14 ----------
+- Hard Shadow
+- Error Check
+
+// ~ 17.04.15 ----------
+- Move On Sliding Vector Error modify
+
+// ~ 17.04 20 ----------
+- Camera Move On Navi Mesh
+
+// ~ 17.05.06 ---------
+- Poundation Water
+
+// ~ 17.05.10 ---------
+- Memory rick Check(Dynamic Buffer Rick)
+
+// ~ 17.05.13 ---------
+- 중간발표 최종준비
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// ♣류서버 요청사항 -----------
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+-카메라충돌
+-게임안에 들어갔을때 팀옵션 방이면 m_iRoomIndex로 같은팀 구별되게 하는 뭔가를 생성
+-인게임에서 다시 방으로 갈때 ClientMap m_bIsReady값 false
+
+-충돌체크 공격모션에서 일정부분만 되게 해주는거 (PASS)
+-player, 봇들은 start 끝나구 키입력(Player의 마우스이동을 통한 카메라 이동은 ㅇㅋ) (PASS)
+-구조체 새로보내줬으니 CLIENT 구조체 변경 (PASS)
+-인게임으로 넘어갈때 ClientMap -> Player로 대입해서 만드는거고 + player에 Client 정보 대입(ex) Player 클래스에 m_iID 변수를 추가) (PASS)
+-스타트 버튼 bool값 하나로 활성화 (PASS)
+-플레이어 키값 받는거 어떤 int값이랑 같아야 키값입력되게 하기(PASS - ㅋㅅㅋ이 할것임)
+-봇, 구슬 SetPos, SetDir함수 추가(PASS - 부모 Obj 클래스에 함수 있음)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// ♣문제인것 -----------
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+- 소프트 쉐도우
+- 디퍼드랜더링 -> 라이트 블랜딩...
+- 포인트라이트 깨짐?
+- 캐릭터 빛 반사 왜 저런지?
+- 카메라 벽에 부딛히면 짧아지겡...
+- 구슬에서 빛이 나게 하고싶다아악.... => 캐릭터도 포함
+- 물
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// ♣필요작업 -----------
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+- Toon Shader
+- HDR Rendering
+- Soft Shadow
+- Reflection
+- Alpha Rendering
+- Trail Mesh(이건 별로 필요없어보인다..)
+///////////////////////////////////////////////////////////////////////////////////////////////////////

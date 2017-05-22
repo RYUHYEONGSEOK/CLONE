@@ -1,0 +1,274 @@
+#include "stdafx.h"
+#include "Renderer.h"
+
+#include "GraphicDevice.h"
+#include "TimeMgr.h"
+#include "RenderTargetMgr.h"
+#include "ResourceMgr.h"
+#include "LightMgr.h"
+
+#include "Obj.h"
+#include "Camera.h"
+#include "Scene.h"
+#include "VIBuffer.h"
+#include "RenderTex.h"
+//#include "BlendTex.h"
+#include "BlendShader.h"
+
+float CRenderer::m_fTimer = 0.f;
+DWORD CRenderer::m_dwFPSCnt = 0;
+
+CRenderer::CRenderer(CDevice * pDevice)
+	: m_pDevice(pDevice)
+	, m_pScene(NULL)
+	, m_pScreenBuffer(NULL)
+	, m_bDeferredStage(false)
+{
+	ZeroMemory(m_szFps, sizeof(TCHAR) * 128);
+}
+
+CRenderer::~CRenderer(void)
+{
+	Release();
+}
+
+bool Compare_ViewZ(CObj * pSour, CObj * pDest)
+{
+	return pSour->GetViewZ() > pDest->GetViewZ();
+}
+
+CRenderer * CRenderer::Create(CDevice * pDevice)
+{
+	CRenderer* pRenderer = new CRenderer(pDevice);
+
+	if (FAILED(pRenderer->Init()))
+		Safe_Delete(pRenderer);
+
+	return pRenderer;
+}
+
+void CRenderer::AddRenderGroup(RENDERGROUP eType, CObj * pGameObject)
+{
+	NULL_CHECK_RETURN(pGameObject, );
+
+	m_RenderGroup[eType].push_back(pGameObject);
+}
+
+void CRenderer::AddRenderGroupFront(RENDERGROUP eType, CObj * pGameObject)
+{
+	NULL_CHECK_RETURN(pGameObject, );
+
+	m_RenderGroup[eType].push_front(pGameObject);
+}
+
+void CRenderer::RemoveRenderGroup(RENDERGROUP eType, CObj * pGameObject)
+{
+	NULL_CHECK_RETURN(pGameObject, );
+
+	auto iter = m_RenderGroup[eType].begin();
+	auto iter_end = m_RenderGroup[eType].end();
+
+	for (iter; iter != iter_end; )
+	{
+		if ((*iter) == pGameObject)
+		{
+			m_RenderGroup[eType].erase(iter);
+			break;
+		}
+		else
+			++iter;
+	}
+}
+
+void CRenderer::ClearRenderGroup(void)
+{
+	for (int i = 0; i < RENDERTYPE_END; ++i)
+		m_RenderGroup[i].clear();
+}
+
+HRESULT CRenderer::Init()
+{
+	HRESULT hr = NULL;
+
+	/*D3D11_VIEWPORT ViewPort;
+	ZeroMemory(&ViewPort, sizeof(ViewPort));
+	UINT numViewport = 1;
+	m_pDevice->GetDeviceContext()->RSGetViewports(&numViewport, &ViewPort);*/
+
+	m_pScreenBuffer = CRenderTex::Create(m_pDevice);
+	NULL_CHECK_RETURN(m_pScreenBuffer, E_FAIL);
+
+	return S_OK;
+}
+
+void CRenderer::Render(const float& fTime)
+{	
+	if (g_bDraw == TRUE)
+	{
+		m_pDevice->Render_Begin();
+
+		if (m_bDeferredStage == TRUE)
+		{
+			Render_Priority();
+			//Render_NoneAlpha();		//논알파를 끄고 디퍼드와 블랜드로 그린다...
+			//여기서 쉐도우맵을 한번 더 그린다.
+			Render_Shadow();
+			Render_Deferred();
+			Render_Blend();
+			Render_Alpha();
+			Render_UI();
+
+			if (m_pScene != NULL)
+				m_pScene->Render();
+
+			Render_DebugBuffer();
+		}
+		else
+		{
+			if (m_pScene != NULL)
+				m_pScene->Render();
+		}
+	}
+
+	Render_FPS(fTime);
+
+	m_pDevice->Render_End();
+}
+
+void CRenderer::Render_Priority(void)
+{
+	RENDERLIST::iterator	iter = m_RenderGroup[RENDERTYPE_PRIORITY].begin();
+	RENDERLIST::iterator	iter_end = m_RenderGroup[RENDERTYPE_PRIORITY].end();
+
+	for (; iter != iter_end; ++iter)
+	{
+		(*iter)->Render();
+	}
+}
+
+void CRenderer::Render_Shadow(void)
+{
+	CRenderTargetMgr::GetInstance()->Begin_MRT_Shadow(L"MRT_ALL");
+
+	LightMatrixStruct tLightMatrix = CLightMgr::GetInstance()->GetLightMatrix();
+
+	RENDERLIST::iterator	iter		= m_RenderGroup[RENDERTYPE_NONEALPHA].begin();
+	RENDERLIST::iterator	iter_end	= m_RenderGroup[RENDERTYPE_NONEALPHA].end();
+
+	for (; iter != iter_end; ++iter)
+	{
+		(*iter)->RenderForShadow(tLightMatrix);
+	}
+
+	CRenderTargetMgr::GetInstance()->End_MRT_Shadow(L"MRT_ALL");
+}
+
+void CRenderer::Render_NoneAlpha(void)
+{
+	RENDERLIST::iterator	iter		= m_RenderGroup[RENDERTYPE_NONEALPHA].begin();
+	RENDERLIST::iterator	iter_end	= m_RenderGroup[RENDERTYPE_NONEALPHA].end();
+
+	for (; iter != iter_end; ++iter)
+	{
+		(*iter)->Render();
+	}
+}
+
+void CRenderer::Render_Alpha(void)
+{
+	m_RenderGroup[RENDERTYPE_ALPHA].sort(Compare_ViewZ);
+
+	RENDERLIST::iterator	iter		= m_RenderGroup[RENDERTYPE_ALPHA].begin();
+	RENDERLIST::iterator	iter_end	= m_RenderGroup[RENDERTYPE_ALPHA].end();
+
+	for (; iter != iter_end; ++iter)
+	{
+		(*iter)->Render();
+	}
+}
+
+void CRenderer::Render_UI(void)
+{
+	m_pDevice->Blend_Begin();
+	m_pDevice->TurnZBufferOff();
+
+	RENDERLIST::iterator	iter		= m_RenderGroup[RENDERTYPE_UI].begin();
+	RENDERLIST::iterator	iter_end	= m_RenderGroup[RENDERTYPE_UI].end();
+
+	for (; iter != iter_end; ++iter)
+	{
+		(*iter)->Render();
+	}
+
+	m_pDevice->TurnZBufferOn();
+	m_pDevice->Blend_End();
+}
+
+void CRenderer::Render_FPS(const float & fTime)
+{
+	m_fTimer += fTime;
+	++m_dwFPSCnt;
+
+	if (m_fTimer >= 1.f)
+	{
+		wsprintf(m_szFps, L"FPS : %d", m_dwFPSCnt);
+		m_fTimer = 0.f;
+		m_dwFPSCnt = 0;
+	}
+	::SetWindowText(g_hWnd, m_szFps);
+}
+
+void CRenderer::Render_Deferred(void)
+{
+	CRenderTargetMgr::GetInstance()->Begin_MRT_Defferd(L"MRT_ALL");
+
+	Render_NoneAlpha();
+
+	CRenderTargetMgr::GetInstance()->End_MRT_Defferd(L"MRT_ALL");
+
+	Render_Light();
+}
+
+void CRenderer::Render_Light(void)
+{
+	CRenderTargetMgr::GetInstance()->Begin_MRT_Light(L"MRT_ALL");
+
+	m_pDevice->Blend_Begin();
+
+	CRenderTargetMgr::GetInstance()->Render_LightTarget(L"Target_Deferred");
+	
+	m_pDevice->Blend_End();
+
+	CRenderTargetMgr::GetInstance()->End_MRT_Light(L"MRT_ALL");
+}
+
+void CRenderer::Render_Blend(void)
+{
+	m_pDevice->Blend_Begin();
+
+	CRenderTargetMgr::GetInstance()->Set_ConstantTable(m_pScreenBuffer, L"Target_Deferred");
+
+	m_pScreenBuffer->Render(DXGI_16);
+	
+	m_pDevice->Blend_End();
+}
+
+void CRenderer::Render_DebugBuffer(void)
+{
+//#ifdef _DEBUG
+	m_pDevice->TurnZBufferOff();
+
+	CRenderTargetMgr::GetInstance()->Render_DebugBuffer(L"Target_Deferred");
+
+	m_pDevice->TurnZBufferOn();
+//#endif
+}
+
+void CRenderer::Release(void)
+{
+	for (int i = 0; i < RENDERTYPE_END; ++i)
+		m_RenderGroup[i].clear();
+
+	Safe_Delete(m_pScreenBuffer);
+	CRenderTargetMgr::GetInstance()->DestroyInstance();
+}
