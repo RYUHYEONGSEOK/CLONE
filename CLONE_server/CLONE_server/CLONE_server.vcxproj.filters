@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Inlcude.h">
+      <Filter>98.Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>98.Header\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern.h">
+      <Filter>98.Header\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>98.Header\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>98.Header\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="MainServer.h">
+      <Filter>00.MainServer</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.h">
+      <Filter>01.Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkerThread.h">
+      <Filter>02.ThreadModule\02-2.WorkerThread</Filter>
+    </ClInclude>
+    <ClInclude Include="ReservationThread.h">
+      <Filter>02.ThreadModule\02-3.ReservationThread</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicThread.h">
+      <Filter>02.ThreadModule\02-4.LogicThread</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerQMgr.h">
+      <Filter>97.Manager\97-4.TimerQMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj.h">
+      <Filter>03.Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>03.Obj\03-1.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bot.h">
+      <Filter>03.Obj\03-2.Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="Bead.h">
+      <Filter>03.Obj\03-3.Bead</Filter>
+    </ClInclude>
+    <ClInclude Include="Line2D.h">
+      <Filter>97.Manager\97-5.NaviMgr\NaviCell\Line2D</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviCell.h">
+      <Filter>97.Manager\97-5.NaviMgr\NaviCell</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviMgr.h">
+      <Filter>97.Manager\97-5.NaviMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMgr.h">
+      <Filter>97.Manager\97-3.GameMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="AcceptModule.h">
+      <Filter>02.ThreadModule\02-1.AcceptModule</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjMgr.h">
+      <Filter>97.Manager\97-2.ObjMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketMgr.h">
+      <Filter>97.Manager\97-1.PacketMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeMgr.h">
+      <Filter>97.Manager\97-6.TimeMgr</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CLONE_server.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99.Default\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="MainServer.cpp">
+      <Filter>00.MainServer</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkerThread.cpp">
+      <Filter>02.ThreadModule\02-2.WorkerThread</Filter>
+    </ClCompile>
+    <ClCompile Include="ReservationThread.cpp">
+      <Filter>02.ThreadModule\02-3.ReservationThread</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicThread.cpp">
+      <Filter>02.ThreadModule\02-4.LogicThread</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerQMgr.cpp">
+      <Filter>97.Manager\97-4.TimerQMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj.cpp">
+      <Filter>03.Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>03.Obj\03-1.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bot.cpp">
+      <Filter>03.Obj\03-2.Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="Bead.cpp">
+      <Filter>03.Obj\03-3.Bead</Filter>
+    </ClCompile>
+    <ClCompile Include="Line2D.cpp">
+      <Filter>97.Manager\97-5.NaviMgr\NaviCell\Line2D</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviCell.cpp">
+      <Filter>97.Manager\97-5.NaviMgr\NaviCell</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviMgr.cpp">
+      <Filter>97.Manager\97-5.NaviMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMgr.cpp">
+      <Filter>97.Manager\97-3.GameMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="AcceptModule.cpp">
+      <Filter>02.ThreadModule\02-1.AcceptModule</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjMgr.cpp">
+      <Filter>97.Manager\97-2.ObjMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketMgr.cpp">
+      <Filter>97.Manager\97-1.PacketMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeMgr.cpp">
+      <Filter>97.Manager\97-6.TimeMgr</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{c4405d2e-6f12-4d68-ac5b-ccc21e5688b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default\ETC">
+      <UniqueIdentifier>{dfab8855-cdfb-427b-87f7-b6f1f071999b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Header">
+      <UniqueIdentifier>{99b4cab2-d3bc-4450-91d7-e320a0ff0036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Header\ETC">
+      <UniqueIdentifier>{af4ac741-8145-48ce-84f5-ecc66091a177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainServer">
+      <UniqueIdentifier>{4e92c76f-6953-4ff5-a9cb-2786816b5c3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Protocol">
+      <UniqueIdentifier>{f9daf1ae-3e68-4b8f-8c09-9892565e773d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ThreadModule">
+      <UniqueIdentifier>{5c1b73ce-bdcc-4c53-ad63-8cf493d13055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ThreadModule\02-1.AcceptModule">
+      <UniqueIdentifier>{0fd9b203-2cfa-4eb8-9660-270e7bc8b9a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ThreadModule\02-2.WorkerThread">
+      <UniqueIdentifier>{f536266f-b4e5-4381-95e4-1fd0e3b8b561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ThreadModule\02-3.ReservationThread">
+      <UniqueIdentifier>{c1696729-4b68-471b-af3f-7c8bc3abb48e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ThreadModule\02-4.LogicThread">
+      <UniqueIdentifier>{92c09d45-2340-4e49-a84a-d6d29fc440b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager">
+      <UniqueIdentifier>{a5726741-f248-4588-8b20-700bd7b8b97d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Obj">
+      <UniqueIdentifier>{509c5cfa-758b-4d7b-8b79-232a9f772f73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Obj\03-1.Player">
+      <UniqueIdentifier>{1c8c00b6-7c63-4ce9-98f0-1791ab4046fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Obj\03-2.Bot">
+      <UniqueIdentifier>{414e3af2-07f8-440e-93ff-a238a36a0f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Obj\03-3.Bead">
+      <UniqueIdentifier>{6eba5951-0478-415f-9e59-4784f5ff19be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-1.PacketMgr">
+      <UniqueIdentifier>{2c5173f9-9343-471b-92bd-1e0295c1d504}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-2.ObjMgr">
+      <UniqueIdentifier>{5ac2eb95-89f9-4f0c-897a-e55e2ae9f775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-3.GameMgr">
+      <UniqueIdentifier>{df91bf9c-068a-4063-bf74-9efdcb62b942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-4.TimerQMgr">
+      <UniqueIdentifier>{f7cba70a-cff9-4007-8a2e-6b1538200938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-5.NaviMgr">
+      <UniqueIdentifier>{4a54561f-a0dc-4d93-8877-1f06ae2280a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-5.NaviMgr\NaviCell">
+      <UniqueIdentifier>{397f471b-0bbc-456a-a734-8dbeaa1b5a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-5.NaviMgr\NaviCell\Line2D">
+      <UniqueIdentifier>{25e36e52-8dce-496d-8110-fdb4e0bc29c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Manager\97-6.TimeMgr">
+      <UniqueIdentifier>{0154f3e4-bae6-44f7-ae8d-e6d65144d48e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>99.Default\ETC</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
