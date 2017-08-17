@@ -77,6 +77,7 @@ DWORD WINAPI LogicThread(void)
 			float fFrameTime = CTimeMgr::GetInstance()->GetTime();
 			g_GlobalMutex.unlock();
 
+
 			//ObjMgr Progress
 			CObjMgr::GetInstance()->Progress(fFrameTime);
 

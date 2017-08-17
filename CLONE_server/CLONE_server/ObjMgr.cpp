@@ -12,11 +12,8 @@ IMPLEMENT_SINGLETON(CObjMgr)
 
 CObjMgr::CObjMgr()
 {
-	//client isconnect
-	for (int i = 0; i < MAX_USER; ++i)
-	{
-		m_bIsUseID[i] = false;
-	}
+	//client IsConnect
+	for (int i = 0; i < MAX_USER; ++i) m_bIsUseID[i] = false;
 
 	ZeroMemory(m_vReserveBeadPos, sizeof(D3DXVECTOR3) * BEAD_COUNT);
 	ZeroMemory(m_pHavingBeadPerPlayer, sizeof(int) * MAX_USER);
@@ -27,14 +24,14 @@ CObjMgr::~CObjMgr()
 
 void CObjMgr::ReserveBeadPos(void)
 {
-	m_vReserveBeadPos[0] = D3DXVECTOR3(3.f - HALFMAPX, 1.f, 3.f - HALFMAPZ);
-	m_vReserveBeadPos[1] = D3DXVECTOR3(5.5f - HALFMAPX, 1.f, 70.f - HALFMAPZ);
-	m_vReserveBeadPos[2] = D3DXVECTOR3(35.f - HALFMAPX, 1.f, 47.f - HALFMAPZ);
-	m_vReserveBeadPos[3] = D3DXVECTOR3(60.f - HALFMAPX, 1.f, 67.f - HALFMAPZ);
-	m_vReserveBeadPos[4] = D3DXVECTOR3(92.f - HALFMAPX, 1.f, 4.f - HALFMAPZ);
-	m_vReserveBeadPos[5] = D3DXVECTOR3(107.f - HALFMAPX, 1.f, 30.f - HALFMAPZ);
-	m_vReserveBeadPos[6] = D3DXVECTOR3(150.f - HALFMAPX, 1.f, 10.f - HALFMAPZ);
-	m_vReserveBeadPos[7] = D3DXVECTOR3(120.f - HALFMAPX, 1.f, 72.f - HALFMAPZ);
+	m_vReserveBeadPos[0] = D3DXVECTOR3(3.f - HALF_PLAZA_MAPX, 0.5f, 3.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[1] = D3DXVECTOR3(5.5f - HALF_PLAZA_MAPX, 0.5f, 70.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[2] = D3DXVECTOR3(35.f - HALF_PLAZA_MAPX, 0.5f, 47.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[3] = D3DXVECTOR3(60.f - HALF_PLAZA_MAPX, 0.5f, 67.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[4] = D3DXVECTOR3(92.f - HALF_PLAZA_MAPX, 0.5f, 4.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[5] = D3DXVECTOR3(107.f - HALF_PLAZA_MAPX, 0.5f, 30.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[6] = D3DXVECTOR3(150.f - HALF_PLAZA_MAPX, 0.5f, 10.f - HALF_PLAZA_MAPZ);
+	m_vReserveBeadPos[7] = D3DXVECTOR3(120.f - HALF_PLAZA_MAPX, 0.5f, 72.f - HALF_PLAZA_MAPZ);
 }
 void CObjMgr::SetPlayerPos(eMapType _eMapType)
 {
@@ -43,78 +40,54 @@ void CObjMgr::SetPlayerPos(eMapType _eMapType)
 	unordered_map<int, CObj*>::iterator iter_end = m_PlayerList.end();
 	m_ObjMgrMutex.unlock();
 
-	//for (iter; iter != iter_end; ++iter)
-	//{
-	//	D3DXVECTOR3 vPos = D3DXVECTOR3(0.f, 0.f, 0.f);
-	//	DWORD dwIdxCheck = UNKNOWN_VALUE;
-	//	bool bPosCheck = false;
-
-	//	while (!bPosCheck)
-	//	{
-	//		int iPlus_Minus_X = rand() % 2;
-	//		int iPlus_Minus_Y = rand() % 2;
-	//		float fX = (float)(rand() % 78);
-	//		float fZ = (float)(rand() % 38);
-	//		if (iPlus_Minus_X == 0)		// 0 == +   ,   1 == -
-	//		{
-	//			if (iPlus_Minus_Y == 0)
-	//				vPos = D3DXVECTOR3(fX, 0.f, fZ);
-	//			else
-	//				vPos = D3DXVECTOR3(fX, 0.f, -fZ);
-	//		}
-	//		else
-	//		{
-	//			if (iPlus_Minus_Y == 0)	// 0 == +   , 1 == -
-	//				vPos = D3DXVECTOR3(-fX, 0.f, fZ);
-	//			else
-	//				vPos = D3DXVECTOR3(-fX, 0.f, -fZ);
-	//		}
-
-	//		CNaviMgr::GetInstance()->GetNaviIndex(&vPos, dwIdxCheck, _eMapType);
-	//		if (dwIdxCheck != UNKNOWN_VALUE)
-	//		{
-	//			bPosCheck = true;
-	//		}
-	//	}
-
-	//	m_ObjMgrMutex.lock();
-	//	iter->second->SetPos(vPos);
-	//	iter->second->SetMapType(_eMapType);
-	//	m_ObjMgrMutex.unlock();
-	//}
-
-	//수정필요 -> 나중에 삭제
-	//임시 확인용
-	switch (_eMapType)
+	for (iter; iter != iter_end; ++iter)
 	{
-	case MAP_KJK_PLAZA:
-	{
-		for (iter; iter != iter_end; ++iter)
+		D3DXVECTOR3 vPos = D3DXVECTOR3(0.f, 0.f, 0.f);
+		DWORD dwIdxCheck = UNKNOWN_VALUE;
+		bool bPosCheck = false;
+
+		while (!bPosCheck)
 		{
-			D3DXVECTOR3 vPos = D3DXVECTOR3(50.f, 0.f, 20.f + iter->first * 10.f);
+			int iPlusOrMinusX = rand() % 2;
+			int iPlusOrMinusY = rand() % 2;
+			float fX = 0.f;
+			float fZ = 0.f;
+			switch (_eMapType)
+			{
+			case MAP_KJK_PLAZA:
+				fX = (float)(rand() % (HALF_PLAZA_MAPX - 2));
+				fZ = (float)(rand() % (HALF_PLAZA_MAPZ - 2));
+				break;
+			case  MAP_KJK_POOL:
+				fX = (float)(rand() % (HALF_POOL_MAPX - 2));
+				fZ = (float)(rand() % (HALF_POOL_MAPZ - 2));
+				break;
+			}
 
-			m_ObjMgrMutex.lock();
-			iter->second->SetObjState(OBJ_STATE_IDEL);
-			iter->second->SetPos(vPos);
-			iter->second->SetMapType(_eMapType);
-			m_ObjMgrMutex.unlock();
-		}
-		break;
-	}
-	case MAP_KJK_POOL:
-	{
-		for (iter; iter != iter_end; ++iter)
-		{
-			D3DXVECTOR3 vPos = D3DXVECTOR3(0.f, 0.f, iter->first * 10.f);
+			// 0 == +   ,   1 == -
+			if (iPlusOrMinusX == 0)
+			{
+				if (iPlusOrMinusY == 0) vPos = D3DXVECTOR3(fX, 0.f, fZ);
+				else vPos = D3DXVECTOR3(fX, 0.f, -fZ);
+			}
+			else
+			{
+				if (iPlusOrMinusY == 0) vPos = D3DXVECTOR3(-fX, 0.f, fZ);
+				else vPos = D3DXVECTOR3(-fX, 0.f, -fZ);
+			}
 
-			m_ObjMgrMutex.lock();
-			iter->second->SetObjState(OBJ_STATE_IDEL);
-			iter->second->SetPos(vPos);
-			iter->second->SetMapType(_eMapType);
-			m_ObjMgrMutex.unlock();
+			CNaviMgr::GetInstance()->GetNaviIndex(&vPos, dwIdxCheck, _eMapType);
+			if (dwIdxCheck != UNKNOWN_VALUE)
+			{
+				bPosCheck = true;
+			}
 		}
-		break;
-	}
+
+		m_ObjMgrMutex.lock();
+		iter->second->SetObjState(OBJ_STATE_IDEL);
+		iter->second->SetPos(vPos);
+		iter->second->SetMapType(_eMapType);
+		m_ObjMgrMutex.unlock();
 	}
 }
 void CObjMgr::SetBotPos(eMapType _eMapType)
@@ -128,23 +101,21 @@ void CObjMgr::SetBotPos(eMapType _eMapType)
 
 		while (!bPosCheck)
 		{
-			int iPlus_Minus_X = rand() % 2;
-			int iPlus_Minus_Y = rand() % 2;
+			int iPlusOrMinusX = rand() % 2;
+			int iPlusOrMinusY = rand() % 2;
 			float fX = (float)(rand() % 78);
 			float fZ = (float)(rand() % 38);
-			if (iPlus_Minus_X == 0)		// 0 == +   ,   1 == -
+
+			// 0 == +   ,   1 == -
+			if (iPlusOrMinusX == 0)		
 			{
-				if (iPlus_Minus_Y == 0)
-					vPos = D3DXVECTOR3(fX, 0.f, fZ);
-				else
-					vPos = D3DXVECTOR3(fX, 0.f, -fZ);
+				if (iPlusOrMinusY == 0) vPos = D3DXVECTOR3(fX, 0.f, fZ);
+				else vPos = D3DXVECTOR3(fX, 0.f, -fZ);
 			}
 			else
 			{
-				if (iPlus_Minus_Y == 0)	// 0 == +   , 1 == -
-					vPos = D3DXVECTOR3(-fX, 0.f, fZ);
-				else
-					vPos = D3DXVECTOR3(-fX, 0.f, -fZ);
+				if (iPlusOrMinusY == 0) vPos = D3DXVECTOR3(-fX, 0.f, fZ);
+				else vPos = D3DXVECTOR3(-fX, 0.f, -fZ);
 			}
 
 			CNaviMgr::GetInstance()->GetNaviIndex(&vPos, dwIdxCheck, _eMapType);
@@ -359,9 +330,8 @@ void CObjMgr::SetObjectsPos(eMapType _eMapType)
 		break;
 	}
 
-	cout << "---------------------------------------------" << endl;
-	cout << "Player size: " << m_PlayerList.size() << " / Bot: " << m_BotList.size() << " / Bead: " << m_BeadList.size() << endl;
-	cout << "---------------------------------------------" << endl;
+	cout << "Player: " << m_PlayerList.size() << " / Bot: " << m_BotList.size() << endl;
+	cout << "------------------------" << endl;
 }
 void CObjMgr::ClearObject(void)
 {
@@ -371,7 +341,10 @@ void CObjMgr::ClearObject(void)
 	for (player_iter; player_iter != player_iter_end; ++player_iter)
 	{
 		m_ObjMgrMutex.lock();
+		reinterpret_cast<CPlayer*>(player_iter->second)->SetKey(0);
 		reinterpret_cast<CPlayer*>(player_iter->second)->SetNaviIndex(0);
+		reinterpret_cast<CPlayer*>(player_iter->second)->SetPlayerStamina(5.f);
+		player_iter->second->SetAngleY(0.f);
 		player_iter->second->SetMapType(MAP_END);
 		player_iter->second->SetObjState(OBJ_STATE_IDEL);
 		m_ObjMgrMutex.unlock();

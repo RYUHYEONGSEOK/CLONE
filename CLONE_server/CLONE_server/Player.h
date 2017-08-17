@@ -37,17 +37,6 @@ public:
 
 
 
-//using bead
-private:
-	bool bIsGetBead[BEAD_END];
-public:
-	void SetPlayerGetBead(int _iBeadType, bool _bIsBeadSet);
-	bool GetPlayerGetBead(int _iBeadType);
-	void ClearGetBead(void);
-
-
-
-
 //using key
 private:
 	DWORD	m_dwNowKey;
@@ -73,17 +62,21 @@ private:
 	bool		m_bKeyDown;	//Key Down Check
 private:
 	void SetWorldMatrix(void);
+	void CheckDirKey(float _fFrameTime);
+	void CheckActionKey(float _fFrameTime);
+	void CheckPosKey(float _fFrameTime);
+	void CheckState(float _fFrameTime);
 public:
-	void SetNaviIndex(DWORD _dwIndex) { m_dwIdx = _dwIndex; }
-	void KeyCheck(float _fFrameTime);
-	void StateCheck(float _fFrameTime);
-	void SetAnimationEnd(bool _bIsEndAni) { m_bIsEndAnimation = _bIsEndAni; }
-	bool AnimationEnd(void) { return m_bIsEndAnimation; }
-
+	inline float GetPlayerStamina(void) {return m_fStamina;}
+	inline void SetPlayerStamina(float _fStamina) { m_fStamina = _fStamina; }
+public:
+	inline void SetNaviIndex(DWORD _dwIndex) { m_dwIdx = _dwIndex; }
+	inline void SetAnimationEnd(bool _bIsEndAni) { m_bIsEndAnimation = _bIsEndAni; }
+	inline bool AnimationEnd(void) { return m_bIsEndAnimation; }
 
 
 public:
 	CPlayer();
-	CPlayer(int _iID, D3DXVECTOR3 _pos = D3DXVECTOR3(0.f, 0.f, 0.f));
+	CPlayer(int _iID, D3DXVECTOR3 _vPos = D3DXVECTOR3(0.f, 0.f, 0.f));
 	virtual ~CPlayer();
 };

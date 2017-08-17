@@ -134,6 +134,7 @@ struct CS_InputKey
 	: public tPacketHeader
 {
 	DWORD	m_dwKey;
+	float	m_fPlayerAngle;
 
 	CS_InputKey()
 	{

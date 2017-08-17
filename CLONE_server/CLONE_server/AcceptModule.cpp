@@ -93,7 +93,7 @@ void CAcceptModule::OnAccept(void)
 
 	//insert player's information
 	CObjMgr::GetInstance()->ConnectPlayer(iClientID, reinterpret_cast<CPlayer*>(pPlayer));
-	cout << "Player ID : " << iClientID << "(Connect IP : " << inet_ntoa(m_tClientAddr.sin_addr) << ")" << endl;
+	cout << "¡Ú Player ID : " << iClientID << "(Connect IP : " << inet_ntoa(m_tClientAddr.sin_addr) << ") ¡Ú" << endl;
 
 
 	g_GlobalMutex.lock();

@@ -248,7 +248,11 @@ bool CPacketMgr::ProcessPacket(char* _pPacket, int _iID)
 			cout << "CS_INPUT_KEY error" << endl;
 			break;
 		}
-		else reinterpret_cast<CPlayer*>((*CObjMgr::GetInstance()->GetPlayerList())[_iID])->SetKey(pPacket->m_dwKey);
+		else
+		{
+			(*CObjMgr::GetInstance()->GetPlayerList())[_iID]->SetAngleY(pPacket->m_fPlayerAngle);
+			reinterpret_cast<CPlayer*>((*CObjMgr::GetInstance()->GetPlayerList())[_iID])->SetKey(pPacket->m_dwKey);
+		}
 
 		//packet setting
 		m_mutexPacketMgr.lock();

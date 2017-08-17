@@ -12,7 +12,7 @@ IMPLEMENT_SINGLETON(CGameMgr)
 CGameMgr::CGameMgr()
 	: m_iHostID(UNKNOWN_VALUE)
 	, m_eMapType(MAP_KJK_PLAZA)
-	, m_iBotCount(50)
+	, m_iBotCount(70)
 {
 	m_eGameType = GAME_END;
 	m_eGameModeType = MODE_END;
@@ -28,7 +28,7 @@ CGameMgr::~CGameMgr()
 bool CGameMgr::Initialize(void)
 {
 	m_eMapType		= MAP_KJK_PLAZA;
-	m_iBotCount		= 50;
+	m_iBotCount		= 70;
 
 	m_eGameType		= GAME_ROOM;
 	m_eGameModeType = MODE_SOLO;
@@ -99,6 +99,7 @@ bool CGameMgr::SetGameType(eGameType _eGameType)
 
 	if (m_eGameType == GAME_LOADING)
 	{
+		cout << "------------------------" << endl;
 		cout << "<< Go to In Loading >>" << endl;
 
 		m_mutexGameMgr.lock();
@@ -195,6 +196,7 @@ bool CGameMgr::SetGameType(eGameType _eGameType)
 	else if (m_eGameType == GAME_ROOM)
 	{
 		cout << "<< Go to In Room >>" << endl;
+		cout << "------------------------" << endl;
 
 		//SetStageStateType STAGE_RESULT
 		SetStageStateType(STAGE_RESULT);

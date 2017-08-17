@@ -31,8 +31,11 @@ extern mutex g_GlobalMutex;
 //client
 const D3DXVECTOR3			g_vLook = D3DXVECTOR3(0.f, 0.f, 1.f);
 #define PLAY_TIME			120
-#define HALFMAPX			80
-#define HALFMAPZ			40
+
+#define HALF_PLAZA_MAPX		80
+#define HALF_PLAZA_MAPZ		40
+#define HALF_POOL_MAPX		25
+#define HALF_POOL_MAPZ		25
 
 
 //key DWORD

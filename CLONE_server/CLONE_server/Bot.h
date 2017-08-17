@@ -32,6 +32,6 @@ public:
 
 public:
 	CBot();
-	CBot(D3DXVECTOR3 _pos, int _iID);
+	CBot(D3DXVECTOR3 _vPos, int _iID);
 	virtual ~CBot();
 };

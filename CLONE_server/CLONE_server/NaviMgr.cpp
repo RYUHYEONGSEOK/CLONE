@@ -117,8 +117,8 @@ DWORD CNaviMgr::MoveOnNaviMesh(D3DXVECTOR3* OUT pPos, const D3DXVECTOR3* OUT pDi
 			// 밖으로 나가는것 방지
 			D3DXVECTOR3 vPosTemp = *pPos;
 
-			if (vPosTemp.x < -HALFMAPX + 1.f || vPosTemp.x > HALFMAPX - 1.f
-				|| vPosTemp.z < -HALFMAPZ + 1.f || vPosTemp.z > HALFMAPZ - 1.f)
+			if (vPosTemp.x < -HALF_PLAZA_MAPX + 1.f || vPosTemp.x > HALF_PLAZA_MAPX - 1.f
+				|| vPosTemp.z < -HALF_PLAZA_MAPZ + 1.f || vPosTemp.z > HALF_PLAZA_MAPZ - 1.f)
 				*pPos -= vSliding * _fFrameTime;
 
 			GetNaviIndex(pPos, dwNextIndex, _eMapType);

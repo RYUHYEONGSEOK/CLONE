@@ -7,8 +7,8 @@
 CPlayer::CPlayer()
 	: m_dwNowKey(0)
 	, m_dwIdx(0)
-	, m_fStamina(10.f)
-	, m_fMaxStamina(20.f)
+	, m_fStamina(5.f)
+	, m_fMaxStamina(10.f)
 	, m_bRun(false)
 	, m_bSit(false)
 	, m_bAtt(false)
@@ -36,10 +36,8 @@ CPlayer::CPlayer()
 	D3DXMatrixIdentity(&m_matWorld);
 	m_vPos = D3DXVECTOR3(0.f, 0.f, 0.f);
 	m_iID = UNKNOWN_VALUE;
-
-	for (int i = 0; i < BEAD_END; ++i) bIsGetBead[i] = false;
 }
-CPlayer::CPlayer(int _iID, D3DXVECTOR3 _pos/* = D3DXVECTOR3(0.f, 0.f, 0.f)*/)
+CPlayer::CPlayer(int _iID, D3DXVECTOR3 _vPos/* = D3DXVECTOR3(0.f, 0.f, 0.f)*/)
 	: m_dwNowKey(0)
 	, m_dwIdx(0)
 	, m_fStamina(5.f)
@@ -67,10 +65,8 @@ CPlayer::CPlayer(int _iID, D3DXVECTOR3 _pos/* = D3DXVECTOR3(0.f, 0.f, 0.f)*/)
 
 	//game information
 	D3DXMatrixIdentity(&m_matWorld);
-	m_vPos = _pos;
+	m_vPos = _vPos;
 	m_iID = _iID;
-
-	for (int i = 0; i < BEAD_END; ++i) bIsGetBead[i] = false;
 }
 CPlayer::~CPlayer()
 {
@@ -87,13 +83,16 @@ int CPlayer::Progress(float _fFrameTime)
 	}
 	else m_mutexPlayer.unlock();
 
+
 	m_mutexPlayer.lock();
 	if (m_eObjState != OBJ_STATE_DIE)
 	{
+		CheckDirKey(_fFrameTime);
 		SetWorldMatrix();
 
-		KeyCheck(_fFrameTime);
-		StateCheck(_fFrameTime);
+		CheckActionKey(_fFrameTime);
+		CheckPosKey(_fFrameTime);
+		CheckState(_fFrameTime);
 		m_mutexPlayer.unlock();
 	}
 	else m_mutexPlayer.unlock();
@@ -103,22 +102,6 @@ int CPlayer::Progress(float _fFrameTime)
 void CPlayer::Release(void)
 {
 	closesocket(m_tSock);
-}
-
-void CPlayer::SetPlayerGetBead(int _iType, bool _bIsBeadSet)
-{
-	bIsGetBead[_iType] = _bIsBeadSet;
-}
-bool CPlayer::GetPlayerGetBead(int _iBeadType)
-{
-	return bIsGetBead[_iBeadType];
-}
-void CPlayer::ClearGetBead(void)
-{
-	for (int i = 0; i < BEAD_END; ++i)
-	{
-		bIsGetBead[i] = false;
-	}
 }
 
 void CPlayer::SetWorldMatrix(void)
@@ -135,7 +118,21 @@ void CPlayer::SetWorldMatrix(void)
 
 	D3DXVec3TransformNormal(&m_vDir, &g_vLook, &m_matWorld);
 }
-void CPlayer::KeyCheck(float _fFrameTime)
+void CPlayer::CheckDirKey(float _fFrameTime)
+{
+	if (KEY_D & m_dwNowKey)
+	{
+		m_fAngle[ANGLE_Y] += (float)D3DXToRadian(90.f * _fFrameTime);
+		if (m_fAngle[ANGLE_Y] > (2 * D3DX_PI)) m_fAngle[ANGLE_Y] -= (float)(2 * D3DX_PI);
+	}
+
+	if (KEY_A & m_dwNowKey)
+	{
+		m_fAngle[ANGLE_Y] -= (float)D3DXToRadian(90.f * _fFrameTime);
+		if (m_fAngle[ANGLE_Y] < 0) m_fAngle[ANGLE_Y] += (float)(2 * D3DX_PI);
+	}
+}
+void CPlayer::CheckActionKey(float _fFrameTime)
 {
 	// 좌클릭 -> 공격
 	if (KEY_LMOUSE & m_dwNowKey)
@@ -187,8 +184,9 @@ void CPlayer::KeyCheck(float _fFrameTime)
 	{
 		m_bSit = false;
 	}
-
-	// 이동
+}
+void CPlayer::CheckPosKey(float _fFrameTime)
+{
 	if (KEY_W & m_dwNowKey)
 	{
 		if (!m_bRun)
@@ -239,6 +237,7 @@ void CPlayer::KeyCheck(float _fFrameTime)
 		m_bKeyDown = true;
 	}
 
+
 	// SPACE -> 점프 => 이동 뒤에 점프를 넣어 이동중에도 점프가능..
 	if (KEY_SPACE & m_dwNowKey)
 	{
@@ -249,20 +248,9 @@ void CPlayer::KeyCheck(float _fFrameTime)
 		}
 		m_eObjState = OBJ_STATE_JUMP;
 	}
-
-	if (KEY_D & m_dwNowKey)
-	{
-		m_fAngle[ANGLE_Y] += (float)D3DXToRadian(90.f * _fFrameTime);
-		if (m_fAngle[ANGLE_Y] > (2 * D3DX_PI)) m_fAngle[ANGLE_Y] -= (float)(2 * D3DX_PI);
-	}
-
-	if (KEY_A & m_dwNowKey)
-	{
-		m_fAngle[ANGLE_Y] -= (float)D3DXToRadian(90.f * _fFrameTime);
-		if (m_fAngle[ANGLE_Y] < 0) m_fAngle[ANGLE_Y] += (float)(2 * D3DX_PI);
-	}
 }
-void CPlayer::StateCheck(float _fFrameTime)
+
+void CPlayer::CheckState(float _fFrameTime)
 {
 	switch (m_eObjState)
 	{

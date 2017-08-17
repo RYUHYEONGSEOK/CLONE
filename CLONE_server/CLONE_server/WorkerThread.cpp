@@ -354,7 +354,6 @@ DWORD WINAPI WorkerThread(void)
 			DWORD dwRecvFlag = 0;
 			WSARecv(reinterpret_cast<CPlayer*>(pPlayer)->GetSocket(), &(pOverEx->wsaBuf), 1, nullptr, &dwRecvFlag, &(pOverEx->m_tOverLapped), nullptr);
 		}
-		else if (pOverEx->m_iOperationType == OP_END) {}
 		else if (pOverEx->m_iOperationType == OP_EVENT_COUNTDOWN)
 		{
 			//timerQ registry( 3 -> 2 -> 1 -> 0 )
@@ -417,7 +416,7 @@ DWORD WINAPI WorkerThread(void)
 			SC_ChangeStateBot tPacket;
 			tPacket.m_iBotID = (int)ullID;
 			tPacket.m_iBotState = OBJ_STATE_MOVE;
-			int iRandTime = rand() % 5 + 6;	//6~10
+			int iRandTime = rand() % 5 + 3;	//3~7 (per 1.33 second)
 			tPacket.m_iBotTimeCount = iRandTime;
 			float fRandRadious = (float)D3DXToRadian((float)(rand() % 360));
 			tPacket.m_fAngleY = fRandRadious;
@@ -432,13 +431,10 @@ DWORD WINAPI WorkerThread(void)
 			}
 			
 			//server's bot setting
-			g_GlobalMutex.lock();
 			reinterpret_cast<CBot*>(pBot)->SetState(OBJ_STATE_MOVE, iRandTime, fRandRadious);
-			g_GlobalMutex.unlock();
 
-			//timerQ registry next bot's moving -> 13~18
-			CTimerQMgr::GetInstance()->AddTimerQ(EVENT_BOT_MOVE, high_resolution_clock::now() + (seconds)(rand() % 6 + 13), (int)ullID);
-
+			//timerQ registry next bot's moving -> 10~14 (per 1 second)
+			CTimerQMgr::GetInstance()->AddTimerQ(EVENT_BOT_MOVE, high_resolution_clock::now() + (seconds)(rand() % 5 + 10), (int)ullID);
 			
 			delete pOverEx;
 		}
@@ -454,8 +450,6 @@ DWORD WINAPI WorkerThread(void)
 			else g_GlobalMutex.unlock();
 
 			
-			g_GlobalMutex.lock();
-
 			//player sync
 			SC_SyncPlayer tSyncPlayerPacket;
 			for (int i = 0; i < MAX_USER; ++i)
@@ -471,7 +465,15 @@ DWORD WINAPI WorkerThread(void)
 				tSyncPlayerPacket.m_vPlayerPos[player_iter->first] = player_iter->second->GetPos();
 			}
 
-			//bot sync
+			//packet send to all
+			unordered_map<int, CObj*>::iterator iter = CObjMgr::GetInstance()->GetPlayerList()->begin();
+			unordered_map<int, CObj*>::iterator iter_end = CObjMgr::GetInstance()->GetPlayerList()->end();
+			for (iter; iter != iter_end; ++iter)
+			{
+				CPacketMgr::GetInstance()->SendPacket(iter->first, &tSyncPlayerPacket);
+			}
+
+			//bot sync 
 			SC_SyncBot tSyncBotPacket;
 			for (int i = 0; i < MAX_BOT_COUNT; ++i) tSyncBotPacket.m_vBotPos[i].y = 1.f;
 
@@ -482,25 +484,22 @@ DWORD WINAPI WorkerThread(void)
 			{
 				tSyncBotPacket.m_fBotAngleY[bot_iter->first] = bot_iter->second->GetAngleY();
 				tSyncBotPacket.m_vBotPos[bot_iter->first] = bot_iter->second->GetPos();
+
 				++iBotCount;
 			}
 			tSyncBotPacket.m_iBotCount = iBotCount;
 
-			g_GlobalMutex.unlock();
-
 			//packet send to all
-			unordered_map<int, CObj*>::iterator iter = CObjMgr::GetInstance()->GetPlayerList()->begin();
-			unordered_map<int, CObj*>::iterator iter_end = CObjMgr::GetInstance()->GetPlayerList()->end();
+			iter = CObjMgr::GetInstance()->GetPlayerList()->begin();
+			iter_end = CObjMgr::GetInstance()->GetPlayerList()->end();
 			for (iter; iter != iter_end; ++iter)
 			{
 				CPacketMgr::GetInstance()->SendPacket(iter->first, &tSyncBotPacket);
-				CPacketMgr::GetInstance()->SendPacket(iter->first, &tSyncPlayerPacket);
 			}
 
 			//timerQ registry next sync 10 packet per 1 second
 			CTimerQMgr::GetInstance()->AddTimerQ(EVENT_SYNC_OBJ, high_resolution_clock::now() + 1ms, (int)ullID);
 
-			
 			delete pOverEx;
 		}
 		else if (pOverEx->m_iOperationType == OP_EVENT_MOVE_ROOM)
@@ -528,12 +527,13 @@ DWORD WINAPI WorkerThread(void)
 			//timerQ Clear
 			CTimerQMgr::GetInstance()->ClearTimerQ();
 
+			cout << "------------------------" << endl;
 			cout << "Reset & Go to WaitingRoom" << endl;
-			cout << "=========================" << endl;
-
+			cout << "------------------------" << endl;
 			
 			delete pOverEx;
 		}
+		else if (pOverEx->m_iOperationType == OP_END) {}
 	}
 
 	return 0;
